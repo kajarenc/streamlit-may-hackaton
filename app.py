@@ -2,34 +2,37 @@ import streamlit as st
 from PIL import Image
 import random
 
+st.title("AAA")
 
-st.title("Hello my friend")
+if "rounds_info" not in st.session_state:
+    st.session_state["rounds_info"] = {}
 
-if "round" not in st.session_state:
-    st.session_state["round"] = {}
-if "attempts" not in st.session_state:
-    st.session_state["attempts"] = 9
+if "current_round" not in st.session_state:
+    st.session_state["current_round"] = 1
 
-if st.session_state["attempts"] == 0:
-    st.balloons()
-else:
-    img, img_id, actual_result, ai_result = Image.open('3.jpg'), str(random.randint(0, 100))+'3.jpg', 0, 6
-    st.image(img, width=600)
-
-    with st.form(key='solution_form', clear_on_submit=True):
-        x = st.number_input("Pick a number", min_value=0, max_value=9)
-        finished = st.form_submit_button('Submit')
-
-    if finished:
-        st.session_state["round"][img_id] = {
-            'user_result': x,
-            'actual_result': actual_result,
-            'ai_result': ai_result
-        }
-        st.session_state["attempts"] -= 1
-
-    st.write(st.session_state["attempts"])
-    st.write(st.session_state["round"])
+if "current_photo_name" not in st.session_state:
+    st.session_state["current_photo_name"] = 0
 
 
+def callback():
+    st.session_state["rounds_info"][img_id] = {
+        'actual_result': actual_result,
+        'ai_result': ai_result,
+        'user_result': x
+    }
 
+    st.session_state["current_round"] += 1
+    st.session_state["current_photo_name"] += 1
+
+
+if st.session_state["current_round"] < 10:
+    img_name = str(st.session_state["current_photo_name"]) + '.png'
+    img, img_id, actual_result, ai_result = Image.open(img_name), str(random.randint(0, 100)) + "_" + img_name, 77, 6
+    st.image(img, width=400)
+
+    x = st.number_input("Pick a number", min_value=0, max_value=9)
+    st.button('Submit', on_change=callback)
+
+    st.write(st.session_state["current_round"])
+    st.write(st.session_state["current_photo_name"])
+    st.write(st.session_state["rounds_info"])
