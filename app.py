@@ -29,12 +29,12 @@ if "current_round" not in st.session_state:
     st.session_state["current_round"] = 0
 
 
-def new_game():
+def new_game_callback():
     st.session_state["match_number"] += 1
     st.session_state["current_round"] = 0
 
 
-def callback():
+def nex_round_callback():
     st.session_state["rounds_info"][st.session_state["current_round"]] = {
         "actual_result": actual_result,
         "ai_result": ai_prediction,
@@ -51,18 +51,21 @@ if st.session_state["current_round"] < 10:
 
     st.image(gen_image(current_image), width=400)
 
-    x = st.number_input("Pick a number", min_value=0, max_value=9)
-    st.button("Submit", on_change=callback)
+    x = st.number_input("Guess the number", min_value=0, max_value=9)
+    st.button("Next Round", on_change=nex_round_callback)
 
     st.write("CURRENT ROUND")
     st.write(st.session_state["current_round"])
     st.write("CURRENT_X")
     st.write(x)
 
+    st.write(st.session_state["rounds_info"])
+
 else:
     ai_score = 0
     user_score = 0
 
+    # COUNT SCORES
     for key, value in st.session_state["rounds_info"].items():
         if value["ai_result"] == value["actual_result"]:
             ai_score += 1
@@ -70,9 +73,12 @@ else:
             user_score += 1
 
     if user_score >= ai_score:
+        st.markdown("### You have won! Robots won't replace you, _yet_.")
         st.balloons()
+    else:
+        st.markdown("Try again.")
 
     st.write(f"YOUR SCORE: {user_score}!")
     st.write(f"AI SCORE: {ai_score}")
 
-    st.button("PLAY AGAIN", on_change=new_game)
+    st.button("PLAY AGAIN", on_change=new_game_callback)
