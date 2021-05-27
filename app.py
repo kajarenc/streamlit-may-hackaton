@@ -19,7 +19,6 @@ st.markdown("## I am _not_ a robot :robot_face:")
 if "match_number" not in st.session_state:
     st.session_state["match_number"] = 1
 
-
 game_data = get_game_data(st.session_state["match_number"])
 st.write(game_data)
 
@@ -65,10 +64,8 @@ else:
     user_score = 0
 
     for key, value in st.session_state["rounds_info"].items():
-
         if value["ai_result"] == value["actual_result"]:
             ai_score += 1
-
         if value["user_result"] == value["actual_result"]:
             user_score += 1
 
