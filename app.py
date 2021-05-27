@@ -52,7 +52,7 @@ if st.session_state["current_round"] < 10:
     st.image(gen_image(current_image), width=400)
 
     x = st.number_input("Guess the number", min_value=0, max_value=9)
-    st.button("Next Round", on_change=nex_round_callback)
+    st.button("Submit", on_change=nex_round_callback)
 
     st.write("CURRENT ROUND")
     st.write(st.session_state["current_round"])
