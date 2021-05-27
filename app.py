@@ -3,11 +3,6 @@ import numpy as np
 import streamlit as st
 from mnist import get_results
 
-st.title("AAA")
-
-if "match_number" not in st.session_state:
-    st.session_state["match_number"] = 1
-
 
 @st.cache()
 def get_game_data(game_number):
@@ -17,6 +12,12 @@ def get_game_data(game_number):
 def gen_image(arr):
     two_d = (np.reshape(arr, (28, 28)) * 255).astype(np.uint8)
     return Image.fromarray(two_d, "L")
+
+
+st.markdown("## I am _not_ a robot :robot_face:")
+
+if "match_number" not in st.session_state:
+    st.session_state["match_number"] = 1
 
 
 game_data = get_game_data(st.session_state["match_number"])
@@ -51,7 +52,7 @@ if st.session_state["current_round"] < 10:
 
     st.image(gen_image(current_image), width=400)
 
-    x = st.number_input("Pick a number", min_value=0, max_value=9, )
+    x = st.number_input("Pick a number", min_value=0, max_value=9)
     st.button("Submit", on_change=callback)
 
     st.write("CURRENT ROUND")
@@ -60,7 +61,6 @@ if st.session_state["current_round"] < 10:
     st.write(x)
 
 else:
-
     ai_score = 0
     user_score = 0
 
@@ -75,7 +75,7 @@ else:
     if user_score >= ai_score:
         st.balloons()
 
-    st.button("PLAY AGAIN", on_change=new_game)
-
     st.write(f"YOUR SCORE: {user_score}!")
     st.write(f"AI SCORE: {ai_score}")
+
+    st.button("PLAY AGAIN", on_change=new_game)
